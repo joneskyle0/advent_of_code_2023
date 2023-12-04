@@ -2,8 +2,6 @@ calibration_document <- read.csv('1_input.txt', header = F, stringsAsFactors = F
 
 strReverse <- function(x) sapply(lapply(strsplit(x, NULL), rev), paste, collapse = "")
 
-x <- calibration_document[1,]
-
 get_calibration_values <- function(x) {
   output_1 <- unlist(strsplit(x, '[[:alpha:]]'))
   output_1 <- noquote(output_1[output_1!=""])[1]

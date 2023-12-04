@@ -5,7 +5,7 @@ strReverse <- function(x) sapply(lapply(strsplit(x, NULL), rev), paste, collapse
 nums <- c('one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine')
 
 get_calibration_values <- function(x) {
-  output_1 <- unlist(strsplit(x, '[[:alpha:]]'))
+  output_1 <- unlist(strsplit(x, c(nums, '[[:alpha:]]')))
   output_1 <- noquote(output_1[output_1!=""])[1]
   output_1 <- if(nchar(output_1) > 1) {substring(output_1, 1, 1)} else {output_1}
   
