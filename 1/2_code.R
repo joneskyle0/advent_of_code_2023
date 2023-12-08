@@ -1,27 +1,18 @@
-calibration_document <- read.csv('1_input.txt', header = F, stringsAsFactors = F, col.names = 'hidden_cal_val')
+calibration_document <- read.csv('input.txt', header = FALSE, stringsAsFactors = FALSE, col.names = 'hidden_cal_val')
 
-strReverse <- function(x) sapply(lapply(strsplit(x, NULL), rev), paste, collapse = "")
+str_reverse <- function(x) sapply(lapply(strsplit(x, NULL), rev), paste, collapse = "")
 
 nums <- c('one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine')
 
-get_calibration_values <- function(x) {
-  output_1 <- unlist(strsplit(x, c(nums, '[[:alpha:]]')))
-  output_1 <- noquote(output_1[output_1!=""])[1]
-  output_1 <- if(nchar(output_1) > 1) {substring(output_1, 1, 1)} else {output_1}
+replace_nums <- function(string) {
   
-  x <- strReverse(x)
-  output_2 <- unlist(strsplit(x, '[[:alpha:]]'))
-  output_2 <- noquote(output_2[output_2!=""])[1]
-  output_2 <- if(nchar(output_2) > 1) {substring(output_2, 1, 1)} else {output_2}
- 
-  output <- as.numeric(noquote(paste(output_1, output_2, sep = '')))
+}
+
+decoder <- function(string, pattern="[[:digit:]]") {
+  digit_1 <- regmatches(string, regexpr(pattern, text=string))
+  digit_2 <- regmatches(strReverse(string), regexpr(pattern, text=strReverse(string)))
+  output <- as.numeric(noquote(paste(digit_1, digit_2, sep = '')))
   return(output)
 }
 
-calibration_document$cal_val <- NA
-
-for(i in 1:nrow(calibration_document)) {
-  calibration_document[i,2] <- get_calibration_values(calibration_document[i,1])
-}
-
-sum(calibration_document$cal_val)
+sum(apply(calibration_document, MARGIN = 1, FUN = decoder))
