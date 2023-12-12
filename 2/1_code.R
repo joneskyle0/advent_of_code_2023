@@ -26,4 +26,40 @@ count_cubes <- function(str) {
   return(cubes)
 }
 
-output <- data.frame(apply(dat, 1, count_cubes))
+count_row <- function(row) {
+  rowSums(sapply(row, count_cubes), na.rm = T)
+}
+
+counts <- data.frame(t(apply(dat, 1, count_row)))
+
+num_per_draw <- function(str) {
+  num_per_draw <- as.numeric(trimws(unlist(strsplit(str, split = '[[:alpha:]]|,'))))
+  num_per_draw <- num_per_draw[!is.na(num_per_draw)]
+  return(sum(num_per_draw, na.rm = T))
+}
+
+a <- matrix(nrow = nrow(dat), ncol = ncol(dat))
+rownames(a) <- rownames(dat)
+colnames(a) <- colnames(dat)
+for(i in 1:nrow(dat)) {
+  for(j in 1:ncol(dat)) {
+    a[i,j] <- num_per_draw(dat[i,j])
+  }
+}
+
+IDs <- rownames(a[rowSums(a > 39) > 0, ])
+
+IDs <- c(IDs, rownames(counts[counts$red<=12& counts$green<=13& counts$blue<=14,]))
+IDs <- unique(IDs)
+
+sum(as.numeric(unlist(strsplit(IDs, ' '))), na.rm = T)
+
+is_valid <- function(game) {
+  ifelse(is.na(game), return(NA),
+  num_red <- as.integer(sub(".*?(\\d+)\\s*red.*", "\\1", str))
+  num_green <- as.integer(sub(".*?(\\d+)\\s*green.*", "\\1", str))
+  num_blue <- as.integer(sub(".*?(\\d+)\\s*blue.*", "\\1", str)))
+  if(num_red > 12 | num_green > 13 | num_blue > 14) {
+    return(rownames(game)) 
+  }
+}
